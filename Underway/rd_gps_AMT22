@@ -1,0 +1,16 @@
+function out = rd_gps_AMT22(fn)
+
+    
+   d = dlmread(fn,'',1,0)
+   
+  # out.time = nan*ones(1,1440)
+  # out.lat =  nan*ones(1,1440)
+  # out.lon =  nan*ones(1,1440)
+   
+   keyboard
+   out.time = y0(d(2,2))-1 + d(2:end,3); # col 3 is fractional j-day
+   out.lat = d(2:end,end-1); # col 4 is lat
+   out.lon = d(2:end,end);   # col 5 is lon
+      
+
+endfunction
