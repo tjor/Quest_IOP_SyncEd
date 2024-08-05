@@ -11,11 +11,8 @@ import ipdb
 
 
 def main(amt_n, amt_y):
-    pathin = '/users/rsg/tjor/scratch_network/AMT_underway/AMT22/Processed/Step3/' # note: Underway in previous
-    # pathin = '../../../AMT%s/Processed/Uway/Step3/' % amt_n
-    # pathin = '/data/datasets/cruise_data/active/AMT%s/OSU/Optics/AMT%s_source/m/' % (amt_n,amt_n)
-    # pathin = '../../Processed/Underway/Step3/'
-    fname = 'amt%s_optics.mat' % amt_n
+    pathin = '/data/datasets/cruise_data/active/SyncED_Quest/Processed/Step3/' # note: Underway in previous
+    fname = 'quest%s_optics.mat' % amt_n
     fullname = os.path.join(pathin,fname)
 
     # Check if file exists
@@ -33,7 +30,7 @@ def main(amt_n, amt_y):
 
     # Read the file
     matvar = sio.loadmat(fullname)
-    amt = matvar['amt%s' % amt_n]
+    amt = matvar['quest%s' % amt_n]
 
     # Get all the first level keys
     amtkeys = list(amt.dtype.fields.keys())
@@ -271,7 +268,7 @@ def main(amt_n, amt_y):
 #        ds.coords[i].attrs = {'units' : xrcoords_attrs[i+'_units']}
 
     pathout = pathin
-    fnameout = 'amt%s_final.nc' % amt_n
+    fnameout = 'quest%s_IOP.nc' % amt_n # HARDCODED FOR QUEST
     
     ds['uway_lat'] = np.real(ds['uway_lat'])
     ds.to_netcdf(os.path.join(pathout,fnameout))
@@ -288,8 +285,8 @@ def main(amt_n, amt_y):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--amt', default='22', help="Number of AMT cruise to process")
-    parser.add_argument('--year', default='2012', help="Year of AMT cruise to process")
+    parser.add_argument('--amt', default='24', help="Number of AMT cruise to process")
+    parser.add_argument('--year', default='2024', help="Year of AMT cruise to process")
     args = parser.parse_args()
     amt_n = args.amt
     amt_y = args.year

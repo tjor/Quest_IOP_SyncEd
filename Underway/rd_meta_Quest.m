@@ -65,7 +65,6 @@ function out = rd_meta_Quest(fn)
 	  # out.ppar = d(:,23);
 	  # out.spar = d(:,24);
 	  
-	  keyboard
 	  out
 	  
 endfunction

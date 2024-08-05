@@ -55,6 +55,9 @@
 
         % Load WAPvars from step1 output file
         load([DIR_STEP1 dailyfiles(iday).name]);
+ 	#WAPvars = load([DIR_STEP1 dailyfiles(iday).name]); # temp fix?
+	#WAPvars=WAPvars.out;
+
 
         % Idea is that flow is always there
         % (also needed by ac9 processing)
