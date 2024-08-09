@@ -42,6 +42,8 @@ run('../input_parameters.m')
 
 
 % acs
+
+
 amt_optics.acs.chl   = [];
 amt_optics.acs.ap    = [];
 amt_optics.acs.ap_u  = [];
@@ -158,9 +160,13 @@ for ifn = 1:size(fn,1)
     %     [out, it_chl] = rm_noisy_acs_chl(out, t2remove_acs_chl, it_chl);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+    #keyboard
    sum(~isnan(chlacs(out.acs)))
    
     % Check if acs variable exists
+   # keyboard
+
+    
     if (~isempty(intersect('acs', fieldnames(out))) & sum(~isnan(chlacs(out.acs)))>0)
         % load acs data into amt_optics
  #amt_optics.acs.N
@@ -313,11 +319,13 @@ endfor
 t0 = y0(str2num(inidate(1:4)));
 
 
-amt_optics.time = amt_optics.acs.time + t0; %     
-amt_optics.acs.time = amt_optics.acs.time + t0 ;%   
+amt_optics.time = amt_optics.acs.time + t0; 
+amt_optics.acs.time = amt_optics.acs.time + t0;   
 amt_optics.acs2.time = amt_optics.acs2.time + t0;%   
 amt_optics.ac9.time = amt_optics.ac9.time + t0;%   
                                       
+
+
 
 % Interpolate ship's underway on acs time  % tjor: p
 % Starting from 2 removes time from the uway field
@@ -326,7 +334,9 @@ for ifield = 1:length(fields)
    amt_optics.uway.(fields{ifield}) = total_uway.(fields{ifield});
 endfor
 
-amt_optics.time = amt_optics.uway.time; # redefine as merged time
+
+amt_optics.time = amt_optics.uway.time- (60/1440); # % manual adjustment for BST logging
+
 % wv532 = find(amt_optics.acs.wv>=532,1);
 % 
 % 
@@ -358,6 +368,8 @@ if ~exist(DIR_STEP3,'dir')
     mkdir(DIR_STEP3)
 endif
 save('-v6', [DIR_STEP3 lower(CRUISE) '_optics.mat'], lower(CRUISE))
+
+# keyboard
 
 % amt_chl.time = amt_optics.time;
 % amt_chl.chl = amt_optics.acs.chl;

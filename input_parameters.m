@@ -22,19 +22,18 @@ CRUISE = "Quest24";
 # last day is 20181028
 % dates
  
-# default config # ACS 167 system
-#inidate = "20242307"; #  jday = 204
-#enddate = "20242307"; #
+# default config # ACS 122 system
+inidate = "20240806"; #  jday = 219
+enddate = "20240806"; #
 
-inidate = "20220623"; # use for testdata only
-enddate = "20220623"; 
+#inidate = "20240725"; #  jday = 206
+#enddate = "20240726"; #
 
-
-WAP_ROOT = strcat('quest24_') # 
-dh8_instruments = {"acs", "bb3"}; #
-dh8_ports = {3,1}; # note - a dh4 was actually used in this deployment (dh8 label is retained)
-dh8_serialnumber = {167,1173}; 
-WAPhour = "09"; # typical WAP hours will be between 09-13
+WAP_ROOT = strcat('quest_2024080624') # 
+dh8_instruments = {"acs", "bb3", "ctd"}; #
+dh8_ports = {4,1,2}; # note - a dh4 was actually used in this deployment (dh8 label is retained)
+dh8_serialnumber = {122,1173}; 
+WAPhour = "10"; # typical WAP hours will be between 09-13
 ACS_CAL_FILE_NAME = "acs122.dev"
 
 
@@ -63,11 +62,12 @@ elseif strcmp(UWAY_WAP_SUBDIR, "dark_counts_BB3/") == 1 %
      # Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
      dh8_serialnumber = {1173, [], 122}; 
 elseif strcmp(UWAY_WAP_SUBDIR, "/") == 1 % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted) ### EDIT THIS SECTION IN SYNC_ED
-     dh8_instruments = {"bb3", "ctd", "acs"};
-     % Ports must correspond to same ports as in dh8_instruments
-      dh8_ports = {1,2,5}; 
-     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-     dh8_serialnumber = {1173, [], 122}; 
+	dh8_instruments = {"acs", "bb3", "ctd"}; #
+	dh8_ports = {4,1,2}; # note - a dh4 was actually used in this deployment (dh8 label is retained)
+	dh8_serialnumber = {122,1173}; 
+	WAPhour = "10"; # typical WAP hours will be between 09-13
+	ACS_CAL_FILE_NAME = "acs122.dev"
+
 endif
 
 
