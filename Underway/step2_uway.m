@@ -30,6 +30,7 @@
    dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? just different format
 
 
+
    %first_day = 1;   
    for iday = first_day:last_day
        
@@ -40,6 +41,7 @@
        # initialize output structure with nans
            ini_out(dailyfiles(iday).name, jdays(iday));
 
+
         % First process Ship ctd data
         % (needed by bb3 processing)
         disp("\nprocessing SHIPs UNDERWAY data...");  
@@ -48,7 +50,6 @@
                 DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \
                 DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%
         disp("...done"); 
-
 
 
         jday_str = dailyfiles(iday).name(end-6:end-4);
@@ -77,8 +78,8 @@
                    disp("Flow already processed")
 
                case "acs"
-                   step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
-       
+                  step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
+     #  keyboard
                case "acs2"
                    step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); % tjor: was not tested for acs2 on AMT 28
        
@@ -98,7 +99,7 @@
 
 #               otherwise
 #                   disp("Instrument to be implemented")
-#                   keyboard
+#               #    keyboard
 
            endswitch
 
@@ -110,6 +111,11 @@
        toc
    endfor
   
+  
+  #keyboard
+
+
+
  if PLOT == 1
    % Plot spectra from acs
    disp("\nplotting spectra...");

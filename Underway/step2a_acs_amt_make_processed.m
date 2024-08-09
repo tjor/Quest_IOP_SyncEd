@@ -91,22 +91,21 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
    i_fl_med = (ismember(tmp_time_min, [5]) & tmp_sched) ;  % assign index to filtered times to be used for correction            %<<<====== CHANGE HERE
 
    
-   
 
    %take median value of the xTF filtered times without using any loop   
    xTF = 8;  % how many 0.2um filtered points we have
    n_wv = length(acs.awl);
 
+
    tmp_fi_a = acs.raw.med(i_fl,1:n_wv)'; # this is for the absorption
    tmp_fi_a = reshape(tmp_fi_a,n_wv,xTF,size(acs.raw.med(i_fl,1:n_wv),1)/xTF);
    med_fi_a = median(tmp_fi_a,2);
    med_fi_a = reshape(med_fi_a, n_wv,size(acs.raw.med(i_fl,1:n_wv),1)/xTF)'; # hourly absorption medians of the first 10 minutes of every hour
-
+  
    tmp_fi_c = acs.raw.med(i_fl,n_wv+1:end)'; # and this is for the attenuation
    tmp_fi_c = reshape(tmp_fi_c,n_wv,xTF,size(acs.raw.med(i_fl,n_wv+1:end),1)/xTF);
    med_fi_c = median(tmp_fi_c,2);
    med_fi_c = reshape(med_fi_c, n_wv,size(acs.raw.med(i_fl,n_wv+1:end),1)/xTF)';
-
 
    % take median also of the within-bin variability of a and c
    tmp_fi_a_u = acs.raw.prc(i_fl, 1:n_wv)';
@@ -123,10 +122,43 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
    acs.cdom.a = med_fi_a;
    acs.cdom.time = time(i_fl_med);
 
-   % Linear interpolation over the course of the day between filtered measurements and their uncertainties
+
+
+   ### extra code added for quest - this interpolates filter interval where gaps were prese
+
+   filter_mask = isnan(med_fi_a(:,1)) == 0
+   filter_index = [1:1:24](filter_mask)
+   for i=1:size(med_fi_a,2)
+	tmp_i = med_fi_a(:,i)(filter_mask);
+	med_fi_a(:,i) = interp1(filter_index,tmp_i,[1:24],'extrap');
+	tmp_i = med_fi_c(:,i)(filter_mask);
+	med_fi_c(:,i) = interp1(filter_index,tmp_i,[1:24],'extrap');
+	tmp_i = med_fi_a_u(:,i)(filter_mask);
+	med_fi_a_u(:,i) = interp1(filter_index,tmp_i,[1:24],'extrap');
+	tmp_i = med_fi_c_u(:,i)(filter_mask);
+	med_fi_c_u(:,i) = interp1(filter_index,tmp_i,[1:24],'extrap');
+   end
+      
+   
+  # manually apply nearest neighbour
+  #med_fi_a(:,12) =   med_fi_a(:,11);
+  #med_fi_a(:,13) =   med_fi_a(:,11);
+
+  #med_fi_c(:,12) =   med_fi_c(:,11);
+  #med_fi_c(:,13) =   med_fi_c(:,11);
+
+  #med_fi_a_u(:,12) =   med_fi_a_u(:,11);
+  #med_fi_a_u(:,13) =   med_fi_a_u(:,11);
+  
+  #med_fi_c_u(:,12) =   med_fi_c_u(:,11);
+  #med_fi_c_u(:,13) =   med_fi_c_u(:,11);
+   
+   ### end of extra code added for quest
+   
+  % Linear interpolation over the course of the day between filtered measurements and their uncertainties
+    #  keyboard
    acs.afilt_i = interp1(time(i_fl_med), med_fi_a, time, 'extrap'); # extrap is just to fill in the last hour of the day
    acs.cfilt_i = interp1(time(i_fl_med), med_fi_c, time, 'extrap');
-  
    acs.afilt_u_i = interp1(time(i_fl_med), med_fi_a_u, time, 'extrap');
    acs.cfilt_u_i = interp1(time(i_fl_med), med_fi_c_u, time, 'extrap');
    
@@ -141,7 +173,6 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
    acs.atot_u(i_uf,:) = acs.raw.prc(i_uf,1:n_wv) ./ sqrt(acs.raw.N(i_uf,1:n_wv)) ; % note that I am dividing the uncertainty by sqrt(N)
    acs.ctot_u(i_uf,:) = acs.raw.prc(i_uf,n_wv+1:end) ./ sqrt(acs.raw.N(i_uf,n_wv+1:end)); % note that I am dividing the uncertainty by sqrt(N)
    
-
    % compute approximate coefficient of variation within the binning time 
    if ~isfield(acs, 'a_cv')
       acs.a_cv = [acs.raw.std(:,1:n_wv)./acs.raw.mean(:,1:n_wv)];
@@ -353,6 +384,7 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
 
    acsoutap = [acsoutap;[acs.raw.time-newT0 acs.Tsb_corr.ap]];
    acsoutcp = [acsoutcp;[acs.raw.time-newT0 acs.Tsb_corr.cp]];
+
 
    if ~isempty(acsoutap)
         acsout.time = acsoutap(:,1);
