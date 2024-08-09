@@ -166,6 +166,7 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
                else
                    [msec_acs,craw,araw,cwl,awl,anc,c_cal,a_cal,c_T_cal,a_T_cal,T_bins] = deal([]);
                endif
+            #   keyboard
 
            case 'acs2'
                acsname2 = ['_2',port,'_ACS'];

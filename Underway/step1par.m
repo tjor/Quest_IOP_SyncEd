@@ -42,8 +42,8 @@ function step1par(jday)
    % fflush(stdout);
 
    %---GRG----
-  # wp = dir([wapdir,fn1, '*19_T_ASCII*']);  %identify each hour of 'iday'
-   wp = dir([wapdir,fn1, '*19_ASCII*']);  %identify each hour of 'iday
+   wp = dir([wapdir,fn1, '*19_T_ASCII*']);  %identify each hour of 'iday'
+	
 
    %break up the name
    for iwp = 1:size(wp,1)
@@ -101,13 +101,17 @@ function step1par(jday)
    % We assume that flow will always be there
    flow = bindata_new(strdate, 1);
    flow_v = bindata_new(strdate, 1);
-#keyboard
+
    first_hour = 1
    last_hour = size(wapfiles,1)
+  
+  # first_hour = 9
+   #last_hour = 11
 
    for ihour = first_hour:last_hour %reads each hour of data and assign the data to their specific structures
    % for ihour = last_hour-1:last_hour  %reads each hour of data and assign the data to their specific structures
 
+  
       disp([fn1 ' ' (wapfiles{ihour,2})]);
       fflush(stdout);
 
@@ -149,6 +153,7 @@ function step1par(jday)
                   acs.a_T_cal = tmp_acs.a_T_cal;
                   acs.c_T_cal = tmp_acs.c_T_cal;
                   acs.T_bins = tmp_acs.T_bins;
+                
                   acs.anc = bindata_merge(acs.anc, tmp_acs.time, tmp_acs.anc);
                   acs.raw = bindata_merge(acs.raw, tmp_acs.time, tmp_acs.raw(:,:));
                  % Save to output var
