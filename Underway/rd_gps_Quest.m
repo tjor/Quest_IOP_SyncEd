@@ -19,7 +19,7 @@ function out = rd_gps_Quest(fn)
     year(i-3) = str2num(cell2mat(d_time(i))(1:4));
     month(i-3) = str2num(cell2mat(d_time(i))(6:7));	
     day(i-3) = str2num(cell2mat(d_time(i))(9:10));	
-    hours(i-3) = str2num(cell2mat(d_time(i))(12:13));	
+    hours(i-3) = str2num(cell2mat(d_time(i))(12:13))+1; # accounts for logger in BST	
     mins(i-3) = str2num(cell2mat(d_time(i))(15:16));	
     secs(i-3) = str2num(cell2mat(d_time(i))(18:19));		
   end
